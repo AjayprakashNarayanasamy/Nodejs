@@ -1,1 +1,1 @@
-console.log("Te")
+console.log("T")
