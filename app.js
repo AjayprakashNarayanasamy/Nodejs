@@ -5,7 +5,7 @@ const customer = require("./routes/shop");
 const path = require("path");
 const rootdir = require("./utils/path");
 
-const app = express();
+const app = express;
 
 app.use(bodyParser());
 app.use(express.static(path.join(__dirname, "/public")));
