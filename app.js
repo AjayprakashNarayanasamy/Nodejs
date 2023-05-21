@@ -6,10 +6,12 @@ const path = require("path");
 const rootdir = require("./utils/path");
 
 const app = express();
+app.set("view engine","pug")
+app.set("views","views")
 
 app.use(bodyParser());
 app.use(express.static(path.join(__dirname, "/public")));
-app.use("/admin", admin);
+app.use("/admin", admin.routes);
 app.use(customer);
 app.use("/", (req, res) => {
   res.status(400).sendFile(path.join(rootdir, "views", "404.html"));
