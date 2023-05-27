@@ -21,10 +21,7 @@ body {
   display: flex;
   align-items: center;
 }
-.main-header__item {
-  margin: 0 1rem;
-  padding: 0;
-}
+
 .main-header-item a {
   text-decoration: none;
   color: white;
@@ -36,4 +33,5 @@ main {
 .main-header-item a:active,
 .main-header-item a.active {
   color: rgb(90, 42, 112);
+  text-decoration: underline;
 }
