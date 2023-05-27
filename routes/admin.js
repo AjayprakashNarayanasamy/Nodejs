@@ -10,7 +10,7 @@ const arr = []
 
 router.get("/add-product", (req, res) => {
   console.log("Text");
-  res.sendFile(path.join(rootdir, "views", "add-product.html"));
+   res.render("add-product" , {Heading:"Add Product" , active:"add-product" })
 });
 router.post("/add-product", (req, res) => {
   
