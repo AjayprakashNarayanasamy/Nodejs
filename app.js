@@ -3,7 +3,8 @@ const bodyParser = require("body-parser");
 const admin = require("./routes/admin");
 const customer = require("./routes/shop");
 const path = require("path");
-const rootdir = require("./utils/path");
+const error = require("./controllers/404error")
+
 
 const app = express();
 app.set("view engine","ejs")
@@ -13,8 +14,6 @@ app.use(bodyParser());
 app.use(express.static(path.join(__dirname, "/public")));
 app.use("/admin", admin.routes);
 app.use(customer);
-app.use("/", (req, res) => {
-  res.status(400).render("404" , {Heading:"No Data Available" , active:"false"});
-});
+app.use("/",error.error );
 
 app.listen(8000);
