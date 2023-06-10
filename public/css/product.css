@@ -46,9 +46,15 @@ main {
   display: block;
 }
 .form-control input {
-  border: 1px solid rgb(255, 0, 30);
+
   font: inherit;
-  border-radius: 2px;
+ 
+  width: 100%;
+}
+.form-control textarea {
+
+  font: inherit;
+
   width: 100%;
 }
 button {
