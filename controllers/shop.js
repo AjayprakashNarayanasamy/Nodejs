@@ -1,35 +1,44 @@
 const Products = require("../models/product");
 const CartClass = require("../models/cart");
 exports.index = (req, res) => {
-  Products.fetchProduct((product) => {
-    res.render("shop/index", {
-      prod: product,
-      Heading: "Shop",
-      active: "productList",
+  Products.fetchProduct()
+    .then(([product, bufferData]) => {
+      res.render("shop/index", {
+        prod: product,
+        Heading: "Shop",
+        active: "productList",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
+
 exports.productDescription = (req, res) => {
-  Products.fetchProductById(req.params.productId, (product) => {
-    res.render("shop/product-detail", {
-      product: product,
-      Heading: "Product Description",
-      active: null,
-    });
-  });
+  Products.fetchProductById(req.params.productId)
+    .then(([product]) => {
+      
+      res.render("shop/product-detail", {
+        product: product[0],
+        Heading: "Product Description",
+        active: null,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 exports.showProduct = (req, res) => {
-  Products.fetchProduct((product) => {
-    res.render("shop/product", {
-      prod: product,
-      Heading: "Shop",
-      active: "view-product",
-    });
-  });
+  Products.fetchProduct()
+    .then(([product, bufferData]) => {
+      res.render("shop/product", {
+        prod: product,
+        Heading: "Shop",
+        active: "view-product",
+      });
+    })
+    .catch(() => {});
 };
 exports.postCart = (req, res) => {
   Products.fetchProductById(req.body.productId, (product) => {
-
     CartClass.addCart(req.body.productId, product.cost);
     res.redirect("/");
   });
@@ -46,7 +55,7 @@ exports.cart = (req, res) => {
           cartProducts.push({ productData: product, qty: quantity.qty });
         }
       }
-   
+
       res.render("shop/cart", {
         Heading: "Cart",
         active: "cart",
@@ -56,12 +65,10 @@ exports.cart = (req, res) => {
   });
 };
 exports.deleteCartItem = (req, res) => {
-
   Products.fetchProductById(req.body.id, (product) => {
-    
     CartClass.deleteCart(req.body.id, product.cost);
   });
-  res.redirect("/")
+  res.redirect("/");
 };
 exports.checkout = (req, res) => {
   res.render("shop/checkout", {
