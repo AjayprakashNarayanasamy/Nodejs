@@ -1,74 +1,28 @@
-const fs = require("fs");
-const path = require("path");
 const Cart = require("./cart");
-const filePath = path.join(
-  path.dirname(process.mainModule.filename),
-  "data",
-  "product.json"
-);
-const getProductFromFile = (cb) => {
-  fs.readFile(filePath, (err, readContent) => {
-    if (!err && readContent.length > 0) {
-      return cb(JSON.parse(readContent.toString()));
-    } else {
-      return cb([]);
-    }
-  });
-};
+const db = require("../utils/databse");
 module.exports = class Product {
-  constructor(product) {
-    this.product = product;
+  constructor(id, title , cost , image , description) {
+    console.log(title, "constructor");
+    this.id = id;
+    this.title = title;
+    this.cost = cost;
+    this.image = image;
+    this.description = description;
   }
   save() {
-    getProductFromFile((products) => {
-      if (this.product.id.length === 0) {
-    
-        this.product = { ...this.product, id: Math.random().toString() };
-        products.push(this.product);
-        fs.writeFile(filePath, JSON.stringify(products), (err) => {});
-      } else {
-       
-        
-
-        let existingProductId = products.findIndex(
-          (existingProduct) => existingProduct.id === this.product.id
-        );
-     
-
-        products[existingProductId] = this.product;
-
-        fs.writeFile(filePath, JSON.stringify(products), (err) => {});
-      }
-    });
-
-    // products.push(this.title);
+    return db.execute(
+      "INSERT INTO sql12627291.products (title , cost , image , description) VALUES (?,?,?,?)",
+      [this.title, this.cost, this.image, this.description]
+    );
   }
-  static delete(id) {
-    getProductFromFile((product) => {
-  
-      const productCost = product.find((val) => {
-        return val.id === id;
-      });
-      const value = product.filter((val) => {
-  
+  static delete(id) {}
 
-        return val.id !== id;
-      });
-    
-      fs.writeFile(filePath, JSON.stringify(value), (err) => {
-        if (!err) {
-          Cart.deleteCart(id, productCost.cost);
-        }
-      });
-    });
+  static fetchProduct() {
+    return db.execute("SELECT * FROM sql12627291.products;");
   }
+  static fetchProductById(id) {
 
-  static fetchProduct(cb) {
-    getProductFromFile(cb);
-  }
-  static fetchProductById(id, cb) {
-    getProductFromFile((product) => {
-      cb(product.find((val) => val.id === id));
-    });
+  return db.execute("SELECT * FROM sql12627291.products WHERE id = ? " , [id])
+
   }
 };

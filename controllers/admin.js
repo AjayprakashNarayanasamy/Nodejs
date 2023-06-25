@@ -1,4 +1,5 @@
 const Products = require("../models/product");
+
 // Add form Page for the Admin
 exports.getProduct = (req, res) => {
   res.render("admin/edit-product", {
@@ -9,20 +10,23 @@ exports.getProduct = (req, res) => {
 };
 // Admin Fetch Product
 exports.listProducts = (req, res) => {
-  Products.fetchProduct((product) => {
-    res.render("admin/product", {
-      prod: product,
-      Heading: "Admin Shop",
-      active: "admin-products",
-    });
-  });
+  Products.fetchProduct()
+    .then(([product, bufferData]) => {
+      res.render("admin/product", {
+        prod: product,
+        Heading: "Admin Shop",
+        active: "admin-products",
+      });
+    })
+    .catch();
 };
 exports.postProduct = (req, res) => {
-  const products = new Products(
-    ({ id, title, cost, image, description } = req.body)
-  );
-  products.save();
-  res.redirect("products");
+
+  const products = new Products(req.body.id,req.body.title,req.body.cost,req.body.image,req.body.description);
+  products
+    .save()
+    .then((val) => res.redirect("products"))
+    .catch((err) => console.log(err));
 };
 //Admin Edit Product
 exports.getEditProduct = (req, res) => {
@@ -53,10 +57,9 @@ exports.postEditedProduct = (req, res) => {
   products.save();
   res.redirect("/products");
 };
-exports.postDeleteProduct = (req , res)=>{
-  const deleteProductId = req.body.id
+exports.postDeleteProduct = (req, res) => {
+  const deleteProductId = req.body.id;
 
-  Products.delete(deleteProductId)
+  Products.delete(deleteProductId);
   res.redirect("/products");
- 
-}
+};
