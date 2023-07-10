@@ -1,28 +1,20 @@
 const Sequelize = require("sequelize");
 const db = require("../utils/databse");
-const product = db.define("product", {
+
+const user = db.define("user", {
   id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
-  title: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  cost: {
-    type: Sequelize.DOUBLE,
-    allowNull: false,
-  },
-  image: {
+  email: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-
 });
-module.exports = product
+module.exports = user

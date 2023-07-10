@@ -1,10 +1,11 @@
 const Products = require("../models/product");
 const CartClass = require("../models/cart");
+// Inital Fetching of all products Index Page
 exports.index = (req, res) => {
-  Products.fetchProduct()
-    .then(([product, bufferData]) => {
+  Products.findAll()
+    .then((products) => {
       res.render("shop/index", {
-        prod: product,
+        prod: products,
         Heading: "Shop",
         active: "productList",
       });
@@ -13,24 +14,25 @@ exports.index = (req, res) => {
       console.log(err);
     });
 };
-
+// Fetch Based on Id for the purpose of the description
 exports.productDescription = (req, res) => {
-  Products.fetchProductById(req.params.productId)
-    .then(([product]) => {
+  Products.findByPk(req.params.productId)
+    .then((product) => {
       
       res.render("shop/product-detail", {
-        product: product[0],
+        product: product,
         Heading: "Product Description",
         active: null,
       });
     })
     .catch((err) => console.log(err));
 };
+// Fetching of all the product
 exports.showProduct = (req, res) => {
-  Products.fetchProduct()
-    .then(([product, bufferData]) => {
+  Products.findAll()
+    .then((products) => {
       res.render("shop/product", {
-        prod: product,
+        prod: products,
         Heading: "Shop",
         active: "view-product",
       });

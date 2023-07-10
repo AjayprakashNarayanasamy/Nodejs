@@ -1,1 +1,9 @@
-[{"title":"Book","cost":"99","image":"https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png","description":"Best book","id":"0.12178884116928756"}]
+[
+  {
+    "title": "Book",
+    "cost": "99",
+    "image": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png",
+    "description": "Best book",
+    "id": "0.12178884116928756"
+  }
+]

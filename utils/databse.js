@@ -1,10 +1,11 @@
-const mysql = require("mysql2")
+const { Sequelize } = require("sequelize");
 
-const pool = mysql.createPool({
-   host:"sql12.freesqldatabase.com",
-   user:"sql12627291",
-   database:"sql12627291",
-   password:"rHnAsGMLFl"
-
-})
-module.exports = pool.promise()
+// const connection = new Sequelize("postgres://ajayprakashn66:QWUBybK6oj9L@ep-fragrant-king-257539.ap-southeast-1.aws.neon.tech/Ecommerce")
+const sequelize = new Sequelize("ServiceBooking", "ajayprakashn66", "2RBoXu9bagnM", {
+  host: "ep-fragrant-king-257539.ap-southeast-1.aws.neon.tech",
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: true, // or "require"
+  },
+});
+module.exports = sequelize;
