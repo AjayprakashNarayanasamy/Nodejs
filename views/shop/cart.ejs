@@ -7,12 +7,14 @@
   <main>
     <%if(products.length > 0){%>
     <ul>
+      <%console.log(JSON.stringify(products) , "Products Displayed in Cart")%>
       <% products.forEach(product=>{%>
-      <li><p><%=product.productData.title%>(<%=product.qty%>)</p>
-      <form action="/cart-delete-item" method="POST">
-        <input type="hidden" name="id" value="<%=product.productData.id%>"/>
-        <button class="btn" type="submit">Delete</button>
-      </form>
+      <li>
+        <p><%=product.title%>(<%=product.cartitem.quantity%>)</p>
+        <form action="/cart-delete-item" method="POST">
+          <input type="hidden" name="id" value="<%=product.id%>" />
+          <button class="btn" type="submit">Delete</button>
+        </form>
       </li>
 
       <%}) %>

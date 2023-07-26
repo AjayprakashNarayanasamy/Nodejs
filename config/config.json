@@ -1,0 +1,12 @@
+{
+  "development": {
+    "username": "ajayprakashn66",
+    "password": "2RBoXu9bagnM",
+    "database": "ServiceBooking",
+    "host": "ep-fragrant-king-257539.ap-southeast-1.aws.neon.tech",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true
+    }
+  }
+ }

@@ -24,21 +24,22 @@ exports.listProducts = (req, res) => {
 };
 // Product Creation for admin and the entire application
 exports.postProduct = (req, res) => {
-  Products.create({
-    title: req.body.title,
-    cost: req.body.cost,
-    image: req.body.image,
-    description: req.body.description,
-  })
+  req.user
+    .createProduct({
+      title: req.body.title,
+      cost: req.body.cost,
+      image: req.body.image,
+      description: req.body.description,
+    })
     .then((val) => {
-      console.log(val);
-      res.redirect("/products")
+   
+      res.redirect("/products");
     })
     .catch((err) => {
       console.log(err);
     });
 };
-//Admin Edit Product
+//Admin fetch the product based on Id
 exports.getEditProduct = (req, res) => {
   const editMode = req.query.edit;
   if (!editMode) {
@@ -62,7 +63,7 @@ exports.getEditProduct = (req, res) => {
       console.log("Error in admin product Edit", err);
     });
 };
-//Admin Update Product
+//Admin Posting the Updated Product
 exports.postEditedProduct = (req, res) => {
   const { id, title, cost, image, description } = req.body;
   Products.update(
@@ -72,25 +73,28 @@ exports.postEditedProduct = (req, res) => {
         id,
       },
     }
-  ).then((success)=>{
-    console.log("Admin Update Succes")
-    res.redirect("/products");
-  }).catch((err)=>{
-    console.log("Admin updation failed" , err)
-  })
+  )
+    .then((success) => {
+      console.log("Admin Update Succes");
+      res.redirect("/products");
+    })
+    .catch((err) => {
+      console.log("Admin updation failed", err);
+    });
 };
-//Admin Delete Producr
+//Admin Delete Product
 exports.postDeleteProduct = (req, res) => {
   const deleteProductId = req.body.id;
-  Products.destroy({where:{
-    id:deleteProductId
-  }}).then((success)=>{
-    console.log("Admin Deleted the product successfully",success)
-    res.redirect("/products")
-  }).catch((err)=>{
-    console.log("Admin product not deleted Successfully",err)
+  Products.destroy({
+    where: {
+      id: deleteProductId,
+    },
   })
-
-
- 
+    .then((success) => {
+      console.log("Admin Deleted the product successfully", success);
+      res.redirect("/products");
+    })
+    .catch((err) => {
+      console.log("Admin product not deleted Successfully", err);
+    });
 };
