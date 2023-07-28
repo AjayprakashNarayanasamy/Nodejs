@@ -10,6 +10,8 @@ const product = require("./models/product");
 const user = require("./models/user");
 const cart = require("./models/cart");
 const cartItems = require("./models/cartItems");
+const order = require("./models/order");
+const orderItems = require("./models/orderItems");
 app.set("view engine", "ejs");
 app.set("views", "views");
 app.use(bodyParser());
@@ -35,25 +37,36 @@ user.hasOne(cart);
 cart.belongsTo(user);
 cart.belongsToMany(product, { through: cartItems });
 product.belongsToMany(cart, { through: cartItems });
-// db.sync()
-//   .then((val) => {
-//     return user.findByPk(1);
-//   })
-//   .then((User) => {
-//     if (!User) {
-//       user.create({
-//         name: "Ajay Praksh N",
-//         email: "ajayprakashn66@gmail.com",
-//       });
-//     }
-//     return User;
-//   })
-//   .then((User) => {
-//     //  return db.drop()
-//     console.log("User Created Successfully");
-//     User.createCart();
-//   })
-//   .catch((err) => {
-//     console.log(err, "Error in sync");
-//   });
+order.belongsTo(user);
+user.hasMany(order);
+order.belongsToMany(product, { through: orderItems });
+product.belongsToMany(order, { through: orderItems });
+
+db.sync()
+  .then((val) => {
+    user.findByPk(1).then((val)=>{
+      console.log("Value" , val)
+    })
+    return user.findByPk(1);
+  })
+  .then((User) => {
+    
+    if (!User) {
+      user.create({
+        name: "Ajay Praksh N",
+        email: "ajayprakashn66@gmail.com",
+      });
+    }
+    console.log(User)
+    return User;
+  })
+  .then((User) => {
+    //  return db.drop()
+    console.log(User , "UserTESTS")
+    console.log("User Created Successfully");
+    User.createCart();
+  })
+  .catch((err) => {
+    console.log(err, "Error in sync");
+  });
 app.listen(8000);

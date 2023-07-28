@@ -111,10 +111,10 @@ exports.cart = (req, res) => {
   req.user
     .getCart()
     .then((cart) => {
+      console.log(JSON.stringify(cart), "Products Fetching in Cart");
       return cart
         .getProducts()
         .then((products) => {
-          console.log(products, "Products Fetching in Cart");
           res.render("shop/cart", {
             Heading: "Cart",
             active: "cart",
@@ -164,9 +164,57 @@ exports.checkout = (req, res) => {
     active: "checkout",
   });
 };
+exports.createOrder = (req, res, next) => {
+  let fetchCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      console.log("CartFetched", JSON.stringify(cart));
+      fetchCart = cart;
+      cart.getProducts().then((cartProduct) => {
+     
+        req.user
+          .createOrder()
+          .then((createorder) => {
+            createorder.addProducts(
+              cartProduct.map((prod) => {
+                prod.orderitem = {quantity:prod.cartitem.quantity}
+                // prod.cartitem.dataValue;
+                return prod;
+              })
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    })
+    .then((completed) => {
+      fetchCart.setProducts(null);
+    })
+    .then((redirect) => {
+      res.redirect("/orders");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 exports.orders = (req, res) => {
-  res.render("shop/orders", {
-    Heading: "Orders",
-    active: "orders",
-  });
+  req.user
+    .getOrders({ include: ["products"] })
+    .then((order) => {
+      console.log(JSON.stringify(order), "Fetching of Orders");
+      res.render("shop/orders", {
+        Heading: "Orders",
+        active: "orders",
+        orders: order,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  // res.render("shop/orders", {
+  //   Heading: "Orders",
+  //   active: "orders",
+  // });
 };
