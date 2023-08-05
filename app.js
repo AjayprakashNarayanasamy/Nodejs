@@ -6,6 +6,7 @@ const path = require("path");
 const error = require("./controllers/404error");
 const db = require("./utils/databse");
 const app = express();
+const cors = require("cors");
 const product = require("./models/product");
 const user = require("./models/user");
 const cart = require("./models/cart");
@@ -15,6 +16,7 @@ const orderItems = require("./models/orderItems");
 app.set("view engine", "ejs");
 app.set("views", "views");
 app.use(bodyParser());
+app.use(cors());
 app.use(express.static(path.join(__dirname, "/public")));
 app.use((req, res, nxt) => {
   user
@@ -25,7 +27,7 @@ app.use((req, res, nxt) => {
       nxt();
     })
     .catch((err) => {
-      console.log("Error in Authentication of user", err);
+      // console.log("Error in Authentication of user", err);
     });
 });
 app.use("/admin", admin.routes);
@@ -42,31 +44,36 @@ user.hasMany(order);
 order.belongsToMany(product, { through: orderItems });
 product.belongsToMany(order, { through: orderItems });
 
-db.sync()
-  .then((val) => {
-    user.findByPk(1).then((val)=>{
-      console.log("Value" , val)
-    })
-    return user.findByPk(1);
-  })
-  .then((User) => {
-    
-    if (!User) {
-      user.create({
-        name: "Ajay Praksh N",
-        email: "ajayprakashn66@gmail.com",
-      });
-    }
-    console.log(User)
-    return User;
-  })
-  .then((User) => {
-    //  return db.drop()
-    console.log(User , "UserTESTS")
-    console.log("User Created Successfully");
-    User.createCart();
-  })
-  .catch((err) => {
-    console.log(err, "Error in sync");
-  });
+// try {
+//   db.sync()
+//   .then((val) => {
+//     user.findByPk(1).then((val)=>{
+//       console.log("Value" , val)
+//     })
+//     return user.findByPk(1);
+//   })
+//   .then((User) => {
+
+//     if (!User) {
+//       user.create({
+//         name: "Ajay Praksh N",
+//         email: "ajayprakashn66@gmail.com",
+//       });
+//     }
+//     console.log(User)
+//     return User;
+//   })
+//   .then((User) => {
+//     //  return db.drop()
+//     console.log(User , "UserTESTS")
+//     console.log("User Created Successfully");
+//     User.createCart();
+//   })
+//   .catch((err) => {
+//     console.log("Error in sync");
+//   });
+// } catch (error) {
+//   console.log("Error in Connecting Database")
+// }
+
 app.listen(8000);

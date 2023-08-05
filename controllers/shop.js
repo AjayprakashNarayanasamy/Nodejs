@@ -1,18 +1,19 @@
 const Products = require("../models/product");
 const CartClass = require("../models/cart");
 // Inital Fetching of all products Index Page
-exports.index = (req, res) => {
-  Products.findAll()
-    .then((products) => {
-      res.render("shop/index", {
-        prod: products,
-        Heading: "Shop",
-        active: "productList",
-      });
-    })
-    .catch((err) => {
-      console.log("Fetching all the Products for User", err);
-    });
+exports.index = async (req, res, next) => {
+  try {
+   const fetch = await Products.findAll();
+   res.send(fetch)
+  } catch (err) {}
+
+  // Products.findAll()
+  //   .then((products) => {
+  //     res.send(products);
+  //   })
+  //   .catch((err) => {
+  //     console.log("Fetching all the Products for User", err);
+  //   });
 };
 // Fetch Based on Id for the purpose of the description
 exports.productDescription = (req, res) => {
@@ -172,13 +173,12 @@ exports.createOrder = (req, res, next) => {
       console.log("CartFetched", JSON.stringify(cart));
       fetchCart = cart;
       cart.getProducts().then((cartProduct) => {
-     
         req.user
           .createOrder()
           .then((createorder) => {
             createorder.addProducts(
               cartProduct.map((prod) => {
-                prod.orderitem = {quantity:prod.cartitem.quantity}
+                prod.orderitem = { quantity: prod.cartitem.quantity };
                 // prod.cartitem.dataValue;
                 return prod;
               })
