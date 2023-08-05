@@ -42,31 +42,31 @@ user.hasMany(order);
 order.belongsToMany(product, { through: orderItems });
 product.belongsToMany(order, { through: orderItems });
 
-db.sync()
-  .then((val) => {
-    user.findByPk(1).then((val)=>{
-      console.log("Value" , val)
-    })
-    return user.findByPk(1);
-  })
-  .then((User) => {
+// db.sync()
+//   .then((val) => {
+//     user.findByPk(1).then((val)=>{
+//       console.log("Value" , val)
+//     })
+//     return user.findByPk(1);
+//   })
+//   .then((User) => {
     
-    if (!User) {
-      user.create({
-        name: "Ajay Praksh N",
-        email: "ajayprakashn66@gmail.com",
-      });
-    }
-    console.log(User)
-    return User;
-  })
-  .then((User) => {
-    //  return db.drop()
-    console.log(User , "UserTESTS")
-    console.log("User Created Successfully");
-    User.createCart();
-  })
-  .catch((err) => {
-    console.log(err, "Error in sync");
-  });
+//     if (!User) {
+//       user.create({
+//         name: "Ajay Praksh N",
+//         email: "ajayprakashn66@gmail.com",
+//       });
+//     }
+//     console.log(User)
+//     return User;
+//   })
+//   .then((User) => {
+//     //  return db.drop()
+//     console.log(User , "UserTESTS")
+//     console.log("User Created Successfully");
+//     User.createCart();
+//   })
+//   .catch((err) => {
+//     console.log(err, "Error in sync");
+//   });
 app.listen(8000);
